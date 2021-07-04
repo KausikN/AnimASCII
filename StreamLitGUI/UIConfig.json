@@ -1,10 +1,10 @@
 {
-    "PROJECT_NAME": "GigaCode",
-    "PROJECT_LINK": "https://github.com/KausikN/GigaCode",
+    "PROJECT_NAME": "AnimASCII",
+    "PROJECT_LINK": "https://github.com/KausikN/AnimASCII",
 
-    "PROJECT_DESC": "GigaCode is a functions and code parsing tool for various languages",
+    "PROJECT_DESC": "A tool to generate and view ASCII Animations and pictures using images, text, sounds and more!",
 
     "PROJECT_README": "README.md",
 
-    "PROJECT_MODES": ["Search Functions", "Function Database", "Parse Code"]
+    "PROJECT_MODES": ["Example Animations", "Text to ASCII", "Image to ASCII", "Video to ASCII Animation", "Sound to ASCII"]
 }
