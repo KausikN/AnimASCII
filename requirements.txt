@@ -3,3 +3,4 @@ tqdm
 numpy
 matplotlib
 opencv-python-headless
+art

@@ -5,6 +5,7 @@
         "tqdm",
         "numpy",
         "matplotlib",
-        "opencv-python-headless"
+        "opencv-python-headless",
+        "art"
     ]
 }
