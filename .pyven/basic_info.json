@@ -1,0 +1,10 @@
+{
+    "repo_name": "AnimASCII",
+    "requirements": [
+        "streamlit",
+        "tqdm",
+        "numpy",
+        "matplotlib",
+        "opencv-python-headless"
+    ]
+}

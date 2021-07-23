@@ -1,0 +1,13 @@
+{
+    "files_to_download": [
+        "StreamLitGUI/",
+        "app.py",
+        "AnimASCII.py",
+        "PaddingLibrary.py",
+        "GeneratorLibrary.py",
+        "Fonts.py",
+        "Utils/",
+        "FontsData/",
+        "Examples/"
+    ]
+}
