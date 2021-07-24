@@ -1,0 +1,20 @@
+{
+    "name": "Basic",
+    "map": [
+        {
+            "fillStr": "-",
+            "valRange": [10, 100]
+        },
+        {
+            "fillStr": "o",
+            "valRange": [100, 200]
+        },
+        {
+            "fillStr": "#",
+            "valRange": [200, 256]
+        }
+    ],
+    "default": {
+        "fillStr": " "
+    }
+}

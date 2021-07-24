@@ -25,8 +25,8 @@ def Convert_Text2ASCIIArt(text, font="random"):
     return asciiArt
 
 def Convert_Image2ASCIIArt(I, processFunc=None):
-    asciiArt = processFunc(I)
-    return asciiArt
+    asciiArt, finalImg = processFunc(I)
+    return asciiArt, finalImg
 
 # Main Functions
 def Animation_Generate_Basic(data, savePath, GenertorFunc=GeneratorLibrary.GenerateAnimation_TextBased_BuildUpText):

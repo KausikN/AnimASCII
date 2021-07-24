@@ -51,6 +51,7 @@ def HomePage():
 ANIMATION_EXAMPLES_PATH = "Examples/"
 DEFAULT_PATH_EXAMPLEIMAGE = "StreamLitGUI/DefaultData/ExampleImage.png"
 DEFAULT_PATH_EXAMPLEVIDEO = "StreamLitGUI/DefaultData/ExampleVideo.mp4"
+IMAGE_ASCII_MAP_DIR = "ImageASCIIData/"
 
 IMAGE_PROCESS_STYLES = {
     "Fill-Based": GeneratorLibrary.GenerateASCII_ImageBased_Fill,
@@ -65,9 +66,15 @@ INPUTREADERS_VIDEO = {
 ANIMATION_DISPLAYDELAY = 0.1
 VIDEO_DISPLAYDELAY = 0.1
 
+INDICATOR_IMAGEASCII_IMAGE_SIZE = [256, 256]
+INDICATOR_IMAGEASCII_ASCII_SIZE = [8, 8]
+
 # Util Vars
 ANIMATION_EXAMPLES = []
 ANIMATION_PLAYLIST = [] # Example element => [window, frames, loopCount, finishStatus]
+IMAGE_ASCII_MAPS = {}
+INDICATOR_IMAGEASCII_IMAGE = None
+INDICATOR_IMAGEASCII_ASCII = None
 
 # Util Functions
 def AddInbetweenSpace(text, spaces=1):
@@ -84,6 +91,14 @@ def GetNames(data):
 
 def GetASCIIWidth(asciiData):
     return max(list(map(len, asciiData.split("\n"))))
+
+def GenerateIndicatorImage_ImageASCII():
+    global INDICATOR_IMAGEASCII_IMAGE
+    if INDICATOR_IMAGEASCII_IMAGE is None:
+        INDICATOR_IMAGEASCII_IMAGE = [list(range(i, i+128)) for i in range(0, 128)]
+        INDICATOR_IMAGEASCII_IMAGE = np.array(INDICATOR_IMAGEASCII_IMAGE, dtype=np.uint8)
+        INDICATOR_IMAGEASCII_IMAGE = cv2.resize(INDICATOR_IMAGEASCII_IMAGE, tuple(INDICATOR_IMAGEASCII_IMAGE_SIZE))
+    return INDICATOR_IMAGEASCII_IMAGE
 
 # Main Functions
 def DisplayASCIIAnimationsCombined():
@@ -109,8 +124,16 @@ def LoadExampleAnimations():
         anim = json.load(open(os.path.join(ANIMATION_EXAMPLES_PATH, p), 'r'))
         ANIMATION_EXAMPLES.append(anim)
 
-def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=1.0):
-    if not st.sidebar.checkbox("Compact Display", True): return "```\n", ""
+def LoadImageASCIIMaps():
+    global IMAGE_ASCII_MAPS
+    for f in os.listdir(IMAGE_ASCII_MAP_DIR):
+        if f.endswith(".json"):
+            image_ascii_map = json.load(open(os.path.join(IMAGE_ASCII_MAP_DIR, f), 'r'))
+            IMAGE_ASCII_MAPS[image_ascii_map["name"]] = image_ascii_map
+
+def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
+    if widget:
+        if not st.sidebar.checkbox("Compact Display", True): return "```\n", ""
 
     fontPixRange = [0.01, 35.0]
 
@@ -134,26 +157,22 @@ def UI_LoadImage():
 
     if USERINPUT_ImageData is not None:
         USERINPUT_ImageData = USERINPUT_ImageData.read()
-    else:
+    if USERINPUT_ImageData is None:
         USERINPUT_ImageData = open(DEFAULT_PATH_EXAMPLEIMAGE, 'rb').read()
 
     USERINPUT_Image = cv2.imdecode(np.frombuffer(USERINPUT_ImageData, np.uint8), cv2.IMREAD_COLOR)
     USERINPUT_Image = cv2.cvtColor(USERINPUT_Image, cv2.COLOR_BGR2RGB)
+    st.image(USERINPUT_Image, "Input Image")
 
     USERINPUT_ResizeRatio = st.slider("Resize Ratio", 0.0, 1.0, 0.01, 0.01)
     USERINPUT_Invert = st.checkbox("Invert Image?")
 
-    col1, col2 = st.beta_columns(2)
-    col1.image(USERINPUT_Image, caption="Original Image", use_column_width=True)
-    
     ResizedSize = (int(USERINPUT_Image.shape[1] * USERINPUT_ResizeRatio), int(USERINPUT_Image.shape[0] * USERINPUT_ResizeRatio))
     USERINPUT_Image = cv2.resize(USERINPUT_Image, ResizedSize)
-    USERINPUT_Image_gray = cv2.cvtColor(USERINPUT_Image, cv2.COLOR_RGB2GRAY)
     if USERINPUT_Invert:
-        USERINPUT_Image_gray = 255 - USERINPUT_Image_gray
-    col2.image(USERINPUT_Image_gray, caption="Final Image", use_column_width=True)
+        USERINPUT_Image = 255 - USERINPUT_Image
 
-    return USERINPUT_Image_gray
+    return USERINPUT_Image
 
 def UI_LoadVideo():
     USERINPUT_VideoInputChoice = st.selectbox("Select Video Input Source", list(INPUTREADERS_VIDEO.keys()))
@@ -175,6 +194,33 @@ def UI_LoadVideo():
     USERINPUT_Video = USERINPUT_VideoReader()
 
     return USERINPUT_Video, not FiniteFrames
+
+def UI_ChooseStyle():
+    global INDICATOR_IMAGEASCII_IMAGE
+
+    USERINPUT_StyleChoice = st.selectbox("Select Style", ["Select Style"] + list(IMAGE_PROCESS_STYLES.keys()))
+    if USERINPUT_StyleChoice == "Select Style": return None
+    USERINPUT_ProcessStyle = IMAGE_PROCESS_STYLES[USERINPUT_StyleChoice]
+    if USERINPUT_StyleChoice == "Borders-Based":
+        USERINPUT_BorderThresholds = st.slider("Border Thresholds", 0, 255, (30, 200), 1)
+        USERINPUT_ProcessStyle = functools.partial(USERINPUT_ProcessStyle, thresholds=USERINPUT_BorderThresholds)
+
+    USERINPUT_ImageASCIIMapChoice = st.sidebar.selectbox("Select Image ASCII Map", list(IMAGE_ASCII_MAPS.keys()))
+    USERINPUT_ImageASCIIMap = IMAGE_ASCII_MAPS[USERINPUT_ImageASCIIMapChoice]
+
+    col1, col2 = st.sidebar.beta_columns(2)
+    GenerateIndicatorImage_ImageASCII()
+    col1.image(INDICATOR_IMAGEASCII_IMAGE, caption="Indicator Image", use_column_width=True)
+    IndicatorImageResized = cv2.resize(INDICATOR_IMAGEASCII_IMAGE, tuple(INDICATOR_IMAGEASCII_ASCII_SIZE))
+    IndicatorStyle = functools.partial(IMAGE_PROCESS_STYLES["Fill-Based"], IMAGE_FILL_ASCII=USERINPUT_ImageASCIIMap)
+    INDICATOR_IMAGEASCII_ASCII, finalImg = AnimASCII.Convert_Image2ASCIIArt(IndicatorImageResized, IndicatorStyle)
+    INDICATOR_IMAGEASCII_ASCII = AddInbetweenSpace(INDICATOR_IMAGEASCII_ASCII, spaces=2)
+    PrefixCode, PostfixCode = GetTextPrefixPostfixCode(GetASCIIWidth(INDICATOR_IMAGEASCII_ASCII), scale=0.25, widget=False)
+    col2.markdown(PrefixCode + INDICATOR_IMAGEASCII_ASCII + PostfixCode, unsafe_allow_html=True)
+
+    USERINPUT_ProcessStyle = functools.partial(USERINPUT_ProcessStyle, IMAGE_FILL_ASCII=USERINPUT_ImageASCIIMap)
+
+    return USERINPUT_ProcessStyle
 
 # Repo Based Functions
 def example_animations():
@@ -223,34 +269,41 @@ def image_to_ascii():
     # Title
     st.header("Image to ASCII")
 
+    LoadImageASCIIMaps()
+
     # Load Inputs
-    USERINPUT_StyleChoice = st.selectbox("Select Style", ["Select Style"] + list(IMAGE_PROCESS_STYLES.keys()))
-    if USERINPUT_StyleChoice == "Select Style": return
-    USERINPUT_ProcessStyle = IMAGE_PROCESS_STYLES[USERINPUT_StyleChoice]
     USERINPUT_Image = UI_LoadImage()
 
+    USERINPUT_ProcessStyle = UI_ChooseStyle()
+    if USERINPUT_ProcessStyle is None: return
+
     # Process Inputs
-    GenASCIIArt = AnimASCII.Convert_Image2ASCIIArt(USERINPUT_Image, USERINPUT_ProcessStyle)
+    GenASCIIArt, I_final = AnimASCII.Convert_Image2ASCIIArt(USERINPUT_Image, USERINPUT_ProcessStyle)
     GenASCIIArt_Padded = PaddingLibrary.Padding_FramePad([GenASCIIArt])[0]
     GenASCIIArt_Padded = AddInbetweenSpace(GenASCIIArt_Padded, spaces=2)
 
     # Display Output
+    st.markdown("## Display ASCII Art")
+
+    col1, col2 = st.beta_columns(2)
+    col1.image(USERINPUT_Image, caption="Original Image", use_column_width=True)
+    col2.image(I_final, caption="Final Image", use_column_width=True)
+
     asciiWidth = GetASCIIWidth(GenASCIIArt_Padded)
     PrefixCode, PostfixCode = GetTextPrefixPostfixCode(asciiWidth)
-
-    st.markdown("## Display ASCII Art")
     st.markdown(PrefixCode + GenASCIIArt_Padded + PostfixCode, unsafe_allow_html=True)
 
 def video_to_ascii_animation():
     # Title
     st.header("Video to ASCII Animation")
 
-    # Load Inputs
-    USERINPUT_StyleChoice = st.selectbox("Select Style", ["Select Style"] + list(IMAGE_PROCESS_STYLES.keys()))
-    if USERINPUT_StyleChoice == "Select Style": return
-    USERINPUT_ProcessStyle = IMAGE_PROCESS_STYLES[USERINPUT_StyleChoice]
+    LoadImageASCIIMaps()
 
+    # Load Inputs
     USERINPUT_Video, WebcamVid = UI_LoadVideo()
+
+    USERINPUT_ProcessStyle = UI_ChooseStyle()
+    if USERINPUT_ProcessStyle is None: return
 
     USERINPUT_Invert = st.checkbox("Invert Video Frames?")
     USERINPUT_ResizeRatio = st.slider("Resize Ratio", 0.0, 1.0, 0.01, 0.01)
@@ -273,14 +326,13 @@ def video_to_ascii_animation():
         for frame in USERINPUT_Frames:
             ResizedSize = (int(frame.shape[1] * USERINPUT_ResizeRatio), int(frame.shape[0] * USERINPUT_ResizeRatio))
             frame = cv2.resize(frame, ResizedSize)
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             if USERINPUT_Invert:
                 frame = 255 - frame
-            GenASCIIArt = AnimASCII.Convert_Image2ASCIIArt(frame, USERINPUT_ProcessStyle)
+            GenASCIIArt, frame_final = AnimASCII.Convert_Image2ASCIIArt(frame, USERINPUT_ProcessStyle)
             GenASCIIArt_Padded = PaddingLibrary.Padding_FramePad([GenASCIIArt])[0]
             GenASCIIArt_Padded = AddInbetweenSpace(GenASCIIArt_Padded, spaces=2)
             GenASCIIAnim.append(GenASCIIArt_Padded)
-            Frames_Processed.append(frame)
+            Frames_Processed.append(frame_final)
             i+=1
             LoaderWidget.markdown("[" + str(i) + " / " + str(len(USERINPUT_Frames)) + "]" + ": Frames Processed")
         LoaderWidget.markdown("All Frames Processed :smiley:!")
@@ -316,11 +368,10 @@ def video_to_ascii_animation():
                 ResizedSize = (int(frame.shape[1] * USERINPUT_ResizeRatio), int(frame.shape[0] * USERINPUT_ResizeRatio))
                 frame = cv2.cvtColor(frame_processed, cv2.COLOR_BGR2RGB)
                 frame_processed = cv2.resize(frame, ResizedSize)
-                frame_processed = cv2.cvtColor(frame_processed, cv2.COLOR_RGB2GRAY)
                 if USERINPUT_Invert:
                     frame_processed = 255 - frame_processed
 
-                GenASCIIArt = AnimASCII.Convert_Image2ASCIIArt(frame, USERINPUT_ProcessStyle)
+                GenASCIIArt, frame_processed = AnimASCII.Convert_Image2ASCIIArt(frame_processed, USERINPUT_ProcessStyle)
                 GenASCIIArt_Padded = PaddingLibrary.Padding_FramePad([GenASCIIArt])[0]
                 GenASCIIArt_Padded = AddInbetweenSpace(GenASCIIArt_Padded, spaces=2)
                 frameCount += 1
