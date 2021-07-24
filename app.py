@@ -143,7 +143,7 @@ def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
     # fontWidthPixs = int(fontWidthPixs)
     PrefixCode = PrefixCode.format(fontWidthPixs=fontWidthPixs)
 
-    print(fontWidthPixs, imgWidth)
+    # print(fontWidthPixs, imgWidth)
 
     return PrefixCode, PostfixCode
 
