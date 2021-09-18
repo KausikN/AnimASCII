@@ -208,7 +208,7 @@ def UI_ChooseStyle():
     USERINPUT_ImageASCIIMapChoice = st.sidebar.selectbox("Select Image ASCII Map", list(IMAGE_ASCII_MAPS.keys()))
     USERINPUT_ImageASCIIMap = IMAGE_ASCII_MAPS[USERINPUT_ImageASCIIMapChoice]
 
-    col1, col2 = st.sidebar.beta_columns(2)
+    col1, col2 = st.sidebar.columns(2)
     GenerateIndicatorImage_ImageASCII()
     col1.image(INDICATOR_IMAGEASCII_IMAGE, caption="Indicator Image", use_column_width=True)
     IndicatorImageResized = cv2.resize(INDICATOR_IMAGEASCII_IMAGE, tuple(INDICATOR_IMAGEASCII_ASCII_SIZE))
@@ -285,7 +285,7 @@ def image_to_ascii():
     # Display Output
     st.markdown("## Display ASCII Art")
 
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     col1.image(USERINPUT_Image, caption="Original Image", use_column_width=True)
     col2.image(I_final, caption="Final Image", use_column_width=True)
 
@@ -310,7 +310,7 @@ def video_to_ascii_animation():
 
     st.markdown("## Display ASCII Animation")
     LoaderWidget = st.empty()
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     AnimWidget_Frame = col1.empty()
     AnimWidget_FinalImage = col2.empty()
     AnimWidget_ASCII = st.empty()
