@@ -1,6 +1,6 @@
-'''
+"""
 A tool for generating and viewing ASCII animations (from images, text, sound and more!)
-'''
+"""
 
 # Imports
 import cv2
@@ -49,20 +49,20 @@ def Animation_Generate_Basic(data, savePath, GenertorFunc=GeneratorLibrary.Gener
     jsonData = Convert_ASCIIAnimList2JSONData(animList, data["name"])
 
     # Save JSON
-    json.dump(jsonData, open(savePath, 'w'))
+    json.dump(jsonData, open(savePath, "w"))
 
     return jsonData
 
 # # Driver Code
 # # Params
 # animName = "Loading_3"
-# savePath = 'Examples/' + animName + '.json'
+# savePath = "Data/Examples/" + animName + ".json"
 
 # GeneratorFunc = GeneratorLibrary.GenerateAnimation_TextBased_BuildUpText
 # inputData = {
 #     "name": animName,
 #     "text": 
-# """ASCII Animator""",
+# '''ASCII Animator''',
 #     "preProcessFuncs": [
 #         functools.partial(Convert_Text2ASCIIArt, font="random")
 #     ],

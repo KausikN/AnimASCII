@@ -1,200 +1,216 @@
 {
     "name": "AnimASCII",
-    "repoLink": "https://github.com/KausikN/AnimASCII",
-    "localPath": "E:/Github Codes and Projects/Projects/AnimASCII",
+    "repo_link": "https://github.com/KausikN/AnimASCII",
+    "local_path": "E:/Github Codes and Projects/Projects/AnimASCII",
     "modules": {
+        "*.py": {
+            "name": "*",
+            "type": "missing",
+            "link": "",
+            "parent_dir": "",
+            "sub_dir": "",
+            "dependencies": []
+        },
         "AnimASCII.py": {
             "name": "AnimASCII",
             "type": "local",
             "link": "https://github.com/KausikN/AnimASCII/blob/master/AnimASCII.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": [
-                "cv2.py",
-                "functools.py",
-                "json.py",
-                "art.py",
-                "GeneratorLibrary.py",
-                "PaddingLibrary.py"
-            ]
-        },
-        "app.py": {
-            "name": "app",
-            "type": "local",
-            "link": "https://github.com/KausikN/AnimASCII/blob/master/app.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": [
-                "os.py",
-                "streamlit.py",
-                "json.py",
-                "time.py",
-                "functools.py",
-                "cv2.py",
-                "numpy.py",
-                "AnimASCII.py",
-                "Fonts.py",
                 "GeneratorLibrary.py",
                 "PaddingLibrary.py",
-                "Utils/VideoUtils.py"
+                "art.py",
+                "cv2.py",
+                "functools.py",
+                "json.py"
             ]
+        },
+        "Data/FontsData/text_dic1.py": {
+            "name": "text_dic1",
+            "type": "local",
+            "link": "https://github.com/KausikN/AnimASCII/blob/master/Data/FontsData/text_dic1.py",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "Data/FontsData",
+            "dependencies": []
+        },
+        "Data/FontsData/text_dic2.py": {
+            "name": "text_dic2",
+            "type": "local",
+            "link": "https://github.com/KausikN/AnimASCII/blob/master/Data/FontsData/text_dic2.py",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "Data/FontsData",
+            "dependencies": []
+        },
+        "Data/FontsData/text_dic3.py": {
+            "name": "text_dic3",
+            "type": "local",
+            "link": "https://github.com/KausikN/AnimASCII/blob/master/Data/FontsData/text_dic3.py",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "Data/FontsData",
+            "dependencies": []
         },
         "Fonts.py": {
             "name": "Fonts",
             "type": "local",
             "link": "https://github.com/KausikN/AnimASCII/blob/master/Fonts.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": [
-                "FontsData/text_dic1.py",
-                "FontsData/text_dic2.py",
-                "FontsData/text_dic3.py"
+                "*.py",
+                "*.py",
+                "*.py"
             ]
         },
         "GeneratorLibrary.py": {
             "name": "GeneratorLibrary",
             "type": "local",
             "link": "https://github.com/KausikN/AnimASCII/blob/master/GeneratorLibrary.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": [
                 "cv2.py",
                 "numpy.py"
             ]
         },
+        "Image.py": {
+            "name": "Image",
+            "type": "missing",
+            "link": "",
+            "parent_dir": "",
+            "sub_dir": "",
+            "dependencies": []
+        },
         "PaddingLibrary.py": {
             "name": "PaddingLibrary",
             "type": "local",
             "link": "https://github.com/KausikN/AnimASCII/blob/master/PaddingLibrary.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "FontsData/text_dic1.py": {
-            "name": "text_dic1",
-            "type": "local",
-            "link": "https://github.com/KausikN/AnimASCII/blob/master/FontsData/text_dic1.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "FontsData",
-            "dependencies": []
-        },
-        "FontsData/text_dic2.py": {
-            "name": "text_dic2",
-            "type": "local",
-            "link": "https://github.com/KausikN/AnimASCII/blob/master/FontsData/text_dic2.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "FontsData",
-            "dependencies": []
-        },
-        "FontsData/text_dic3.py": {
-            "name": "text_dic3",
-            "type": "local",
-            "link": "https://github.com/KausikN/AnimASCII/blob/master/FontsData/text_dic3.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "FontsData",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": []
         },
         "Utils/VideoUtils.py": {
             "name": "VideoUtils",
             "type": "local",
             "link": "https://github.com/KausikN/AnimASCII/blob/master/Utils/VideoUtils.py",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "Utils",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "Utils",
             "dependencies": [
-                "os.py",
+                "Image.py",
                 "cv2.py",
-                "PIL.py",
+                "matplotlib/pyplot.py",
                 "numpy.py",
-                "matplotlib.pyplot.py",
+                "os.py",
                 "tqdm.py"
             ]
         },
-        "functools.py": {
-            "name": "functools",
-            "type": "inbuilt",
+        "VideoUtils.py": {
+            "name": "VideoUtils",
+            "type": "missing",
             "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "",
+            "sub_dir": "",
             "dependencies": []
         },
-        "streamlit.py": {
-            "name": "streamlit",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "matplotlib.pyplot.py": {
-            "name": "matplotlib.pyplot",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
+        "app.py": {
+            "name": "app",
+            "type": "local",
+            "link": "https://github.com/KausikN/AnimASCII/blob/master/app.py",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": [
+                "AnimASCII.py",
+                "Fonts.py",
+                "GeneratorLibrary.py",
+                "PaddingLibrary.py",
+                "VideoUtils.py",
+                "cv2.py",
+                "functools.py",
+                "json.py",
+                "numpy.py",
+                "os.py",
+                "streamlit.py",
+                "time.py"
+            ]
         },
         "art.py": {
             "name": "art",
             "type": "inbuilt",
             "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "PIL.py": {
-            "name": "PIL",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "time.py": {
-            "name": "time",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "numpy.py": {
-            "name": "numpy",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": []
         },
         "cv2.py": {
             "name": "cv2",
             "type": "inbuilt",
             "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": []
         },
-        "os.py": {
-            "name": "os",
+        "functools.py": {
+            "name": "functools",
             "type": "inbuilt",
             "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
-            "dependencies": []
-        },
-        "tqdm.py": {
-            "name": "tqdm",
-            "type": "inbuilt",
-            "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": []
         },
         "json.py": {
             "name": "json",
             "type": "inbuilt",
             "link": "",
-            "parentDir": "E:/Github Codes and Projects/Projects/AnimASCII",
-            "subDir": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "matplotlib/pyplot.py": {
+            "name": "pyplot",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "matplotlib",
+            "dependencies": []
+        },
+        "numpy.py": {
+            "name": "numpy",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "os.py": {
+            "name": "os",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "streamlit.py": {
+            "name": "streamlit",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "time.py": {
+            "name": "time",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "tqdm.py": {
+            "name": "tqdm",
+            "type": "inbuilt",
+            "link": "",
+            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "sub_dir": "",
             "dependencies": []
         }
     }

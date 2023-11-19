@@ -1,7 +1,13 @@
-from FontsData.text_dic1 import *
-from FontsData.text_dic2 import *
-from FontsData.text_dic3 import *
+"""
+Fonts
+"""
 
+# Imports
+from Data.FontsData.text_dic1 import *
+from Data.FontsData.text_dic2 import *
+from Data.FontsData.text_dic3 import *
+
+# Fonts
 SMALL_WIZARD_FONT = [
     "contessa",
     "avatar",
@@ -342,23 +348,23 @@ NON_ASCII_FONTS = [
     "fancy130"]
 
 RANDOM_FILTERED_FONTS = [
-    '5x8',
-    'binary',
-    'decimal',
-    'high_noo',
-    'hills',
-    'katakana',
-    'morse',
-    'nfi1',
-    'octal',
-    'rot13',
-    'smtengwar',
-    'tengwar',
-    'tsalagi',
-    'gauntlet',
-    'flyn_sh',
-    'moscow',
-    'dwhistled'] + NON_ASCII_FONTS
+    "5x8",
+    "binary",
+    "decimal",
+    "high_noo",
+    "hills",
+    "katakana",
+    "morse",
+    "nfi1",
+    "octal",
+    "rot13",
+    "smtengwar",
+    "tengwar",
+    "tsalagi",
+    "gauntlet",
+    "flyn_sh",
+    "moscow",
+    "dwhistled"] + NON_ASCII_FONTS
 
 FONT_MAP = {"block": [block_dic, True], "banner": [banner_dic, False],  # pragma: no cover
             "standard": [standard_dic, False], "avatar": [avatar_dic, True],

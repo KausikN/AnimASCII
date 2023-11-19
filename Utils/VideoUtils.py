@@ -1,6 +1,6 @@
-'''
+"""
 Library for basic video functions
-'''
+"""
 
 # Imports
 import os
@@ -31,9 +31,9 @@ def ReadImage(imgPath, imgSize=None, keepAspectRatio=False):
     # I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)
     return I
 
-def DisplayImage(I, title=''):
+def DisplayImage(I, title=""):
     I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)
-    plt.imshow(I, 'gray')
+    plt.imshow(I, "gray")
     plt.title(title)
     plt.show()
 
@@ -93,10 +93,10 @@ def DisplayVideo(vid=None, path=None, max_frames=-1, EffectFunc=None):
             if EffectFunc is not None:
                 frame = EffectFunc(frame)
             # Display the resulting frame
-            cv2.imshow('Video', frame)
+            cv2.imshow("Video", frame)
             frameCount += 1
             # Press Q on keyboard to  exit
-            if cv2.waitKey(25) & 0xFF == ord('q'):
+            if cv2.waitKey(25) & 0xFF == ord("q"):
                 break
         # Break the loop
         else: 
@@ -119,13 +119,14 @@ def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0,
     if size is None:
         size = (640, 480)
         
-    if os.path.splitext(pathOut)[-1] == '.gif':
+    if os.path.splitext(pathOut)[-1] == ".gif":
         extraFrames = []
         if len(frames_effect) > 1:
             extraFrames = frames_effect[1:]
-        frames_effect[0].save(pathOut, save_all=True, append_images=extraFrames, format='GIF', loop=0)
+        frames_effect[0].save(pathOut, save_all=True, append_images=extraFrames, format="GIF", loop=0)
     else:
-        out = cv2.VideoWriter(pathOut, cv2.VideoWriter_fourcc(*'XVID'), fps, size)
+        codec = cv2.VideoWriter_fourcc(*"avc1")
+        out = cv2.VideoWriter(pathOut, codec, fps, size)
         for frame in frames_effect:
             out.write(frame)
         out.release()
@@ -133,13 +134,13 @@ def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0,
 # Frame Functions
 def GetFillBoxFromFrameName(framePath):
     frameName = os.path.splitext(os.path.basename(framePath))[0]
-    frameData = frameName.split('_')[2:]
+    frameData = frameName.split("_")[2:]
     FillBox = [[int(frameData[0])/int(frameData[2]), int(frameData[1])/int(frameData[2])], [int(frameData[3])/int(frameData[5]), int(frameData[4])/int(frameData[5])]]
     return FillBox
 
 # Driver Code
 # Params
-# path = 'TestVids/test.mp4'
+# path = "TestVids/test.mp4"
 # # Params
 
 # # RunCode

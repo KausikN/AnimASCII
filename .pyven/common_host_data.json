@@ -7,7 +7,7 @@
         "GeneratorLibrary.py",
         "Fonts.py",
         "Utils/",
-        "FontsData/",
-        "Examples/"
+        "Data/FontsData/",
+        "Data/Examples/"
     ]
 }

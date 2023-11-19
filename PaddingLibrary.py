@@ -1,6 +1,6 @@
-'''
+"""
 Padding Library for ascii animation padding functions
-'''
+"""
 
 # Imports
 
@@ -22,14 +22,14 @@ def Padding_SimpleStrRepeat(textList, padStr="o", X_count=1, Y_count=1):
         
         padLenMid_X = [int(textDims[0]/len(padStr)), textDims[0]%len(padStr)]
         pad_X = [padStr*Counts[0], (padStr*padLenMid_X[0]) + padStr[:padLenMid_X[1]], padStr*Counts[0]]
-        padLine = ''.join(pad_X)
+        padLine = "".join(pad_X)
         
         paddedLines = []
         paddedLines = paddedLines + [padLine]*Counts[1]
         for l in textLines:
             textLineMatchPadCount = textDims[0] - len(l)
             pad_L = [padStr*Counts[0], l + " "*(textLineMatchPadCount), padStr*Counts[0]]
-            textLine = ''.join(pad_L)
+            textLine = "".join(pad_L)
             paddedLines.append(textLine)
         paddedLines = paddedLines + [padLine]*Counts[1]
         processedList.append("\n".join(paddedLines))
@@ -51,16 +51,16 @@ def Padding_FramePad(textList):
         textDims = [max(lineLens), len(textLines)]
         
         pad_X_Top = [".", "-"*(textDims[0]), "."]
-        padLine_Top = ''.join(pad_X_Top)
+        padLine_Top = "".join(pad_X_Top)
         pad_X_Bottom = ["L", "-"*(textDims[0]), "⅃"]
-        padLine_Bottom = ''.join(pad_X_Bottom)
+        padLine_Bottom = "".join(pad_X_Bottom)
         
         paddedLines = []
         paddedLines = [padLine_Top] + paddedLines
         for l in textLines:
             textLineMatchPadCount = textDims[0] - len(l)
             pad_L = ["|", l + " "*(textLineMatchPadCount), "|"]
-            textLine = ''.join(pad_L)
+            textLine = "".join(pad_L)
             paddedLines.append(textLine)
         paddedLines = paddedLines + [padLine_Bottom]
         processedList.append("\n".join(paddedLines))

@@ -18,40 +18,40 @@ import PaddingLibrary
 from Utils import VideoUtils
 
 # Main Vars
-config = json.load(open('./StreamLitGUI/UIConfig.json', 'r'))
+config = json.load(open("./StreamLitGUI/UIConfig.json", "r"))
 
 # Main Functions
 def main():
     # Create Sidebar
     selected_box = st.sidebar.selectbox(
-    'Choose one of the following',
+    "Choose one of the following",
         tuple(
-            [config['PROJECT_NAME']] + 
-            config['PROJECT_MODES']
+            [config["PROJECT_NAME"]] + 
+            config["PROJECT_MODES"]
         )
     )
     
-    if selected_box == config['PROJECT_NAME']:
+    if selected_box == config["PROJECT_NAME"]:
         HomePage()
     else:
-        correspondingFuncName = selected_box.replace(' ', '_').lower()
+        correspondingFuncName = selected_box.replace(" ", "_").lower()
         if correspondingFuncName in globals().keys():
             globals()[correspondingFuncName]()
  
 
 def HomePage():
-    st.title(config['PROJECT_NAME'])
-    st.markdown('Github Repo: ' + "[" + config['PROJECT_LINK'] + "](" + config['PROJECT_LINK'] + ")")
-    st.markdown(config['PROJECT_DESC'])
+    st.title(config["PROJECT_NAME"])
+    st.markdown("Github Repo: " + "[" + config["PROJECT_LINK"] + "](" + config["PROJECT_LINK"] + ")")
+    st.markdown(config["PROJECT_DESC"])
 
-    # st.write(open(config['PROJECT_README'], 'r').read())
+    # st.write(open(config["PROJECT_README"], "r").read())
 
 #############################################################################################################################
 # Repo Based Vars
-ANIMATION_EXAMPLES_PATH = "Examples/"
+ANIMATION_EXAMPLES_PATH = "Data/Examples/"
 DEFAULT_PATH_EXAMPLEIMAGE = "StreamLitGUI/DefaultData/ExampleImage.png"
 DEFAULT_PATH_EXAMPLEVIDEO = "StreamLitGUI/DefaultData/ExampleVideo.mp4"
-IMAGE_ASCII_MAP_DIR = "ImageASCIIData/"
+IMAGE_ASCII_MAP_DIR = "Data/ImageASCIIData/"
 
 IMAGE_PROCESS_STYLES = {
     "Fill-Based": GeneratorLibrary.GenerateASCII_ImageBased_Fill,
@@ -79,8 +79,8 @@ INDICATOR_IMAGEASCII_ASCII = None
 # Util Functions
 def AddInbetweenSpace(text, spaces=1):
     textLines = text.split("\n")
-    textSpacedLines = [(' '*spaces).join(list(l)) for l in textLines]
-    textSpaced = '\n'.join(textSpacedLines)
+    textSpacedLines = [(" "*spaces).join(list(l)) for l in textLines]
+    textSpaced = "\n".join(textSpacedLines)
     return textSpaced
 
 def GetNames(data):
@@ -121,14 +121,14 @@ def DisplayASCIIAnimationsCombined():
 def LoadExampleAnimations():
     global ANIMATION_EXAMPLES
     for p in os.listdir(ANIMATION_EXAMPLES_PATH):
-        anim = json.load(open(os.path.join(ANIMATION_EXAMPLES_PATH, p), 'r'))
+        anim = json.load(open(os.path.join(ANIMATION_EXAMPLES_PATH, p), "r"))
         ANIMATION_EXAMPLES.append(anim)
 
 def LoadImageASCIIMaps():
     global IMAGE_ASCII_MAPS
     for f in os.listdir(IMAGE_ASCII_MAP_DIR):
         if f.endswith(".json"):
-            image_ascii_map = json.load(open(os.path.join(IMAGE_ASCII_MAP_DIR, f), 'r'))
+            image_ascii_map = json.load(open(os.path.join(IMAGE_ASCII_MAP_DIR, f), "r"))
             IMAGE_ASCII_MAPS[image_ascii_map["name"]] = image_ascii_map
 
 def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
@@ -137,8 +137,8 @@ def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
 
     fontPixRange = [0.01, 35.0]
 
-    PrefixCode = '<pre><p style="font-family:Courier; color:White; font-size: {fontWidthPixs}px;">'
-    PostfixCode = '</p></pre>'
+    PrefixCode = "<pre><p style='font-family:Courier; color:White; font-size: {fontWidthPixs}px;'>"
+    PostfixCode = "</p></pre>"
     fontWidthPixs = min(fontPixRange[1], max(fontPixRange[0], (maxPixs / imgWidth)*scale))
     # fontWidthPixs = int(fontWidthPixs)
     PrefixCode = PrefixCode.format(fontWidthPixs=fontWidthPixs)
@@ -153,12 +153,12 @@ def UI_RegisterDisplayASCIIAnimation(frames, col=st, loopCount=-1):
     ANIMATION_PLAYLIST.append([AnimDisplay, frames, loopCount, False])
 
 def UI_LoadImage():
-    USERINPUT_ImageData = st.file_uploader("Upload Start Image", ['png', 'jpg', 'jpeg', 'bmp'])
+    USERINPUT_ImageData = st.file_uploader("Upload Start Image", ["png", "jpg", "jpeg", "bmp"])
 
     if USERINPUT_ImageData is not None:
         USERINPUT_ImageData = USERINPUT_ImageData.read()
     if USERINPUT_ImageData is None:
-        USERINPUT_ImageData = open(DEFAULT_PATH_EXAMPLEIMAGE, 'rb').read()
+        USERINPUT_ImageData = open(DEFAULT_PATH_EXAMPLEIMAGE, "rb").read()
 
     USERINPUT_Image = cv2.imdecode(np.frombuffer(USERINPUT_ImageData, np.uint8), cv2.IMREAD_COLOR)
     USERINPUT_Image = cv2.cvtColor(USERINPUT_Image, cv2.COLOR_BGR2RGB)
@@ -182,7 +182,7 @@ def UI_LoadVideo():
     # Upload Video File
     if USERINPUT_VideoInputChoice == "Upload Video File":
         USERINPUT_VideoReader = INPUTREADERS_VIDEO[USERINPUT_VideoInputChoice]
-        USERINPUT_VideoPath = st.file_uploader("Upload Video", ['avi', 'mp4', 'wmv'])
+        USERINPUT_VideoPath = st.file_uploader("Upload Video", ["avi", "mp4", "wmv"])
         if USERINPUT_VideoPath is None:
             USERINPUT_VideoPath = DEFAULT_PATH_EXAMPLEVIDEO
         USERINPUT_VideoReader = functools.partial(USERINPUT_VideoReader, USERINPUT_VideoPath)

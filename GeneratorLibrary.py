@@ -1,6 +1,6 @@
-'''
+"""
 Generator Library for animation generator functions
-'''
+"""
 
 # Imports
 import cv2
@@ -44,7 +44,7 @@ def GenerateASCII_ImageBased_Border(I, IMAGE_FILL_ASCII, thresholds=[30, 200]):
 
 # Driver Code
 # # Params
-# imgPath = "TestImgs/Test.jpg"
+# imgPath = "Data/TestImgs/Test.jpg"
 # # Params
 
 # # RunCode
