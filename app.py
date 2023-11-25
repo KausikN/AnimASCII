@@ -131,9 +131,8 @@ def LoadImageASCIIMaps():
             image_ascii_map = json.load(open(os.path.join(IMAGE_ASCII_MAP_DIR, f), "r"))
             IMAGE_ASCII_MAPS[image_ascii_map["name"]] = image_ascii_map
 
-def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
-    if widget:
-        if not st.sidebar.checkbox("Compact Display", True): return "```\n", ""
+def GetTextDisplayCode(text, imgWidth, maxPixs=750, scale=0.8, compact=True):
+    if compact: return "```\n" + text + "\n```"
 
     fontPixRange = [0.01, 35.0]
 
@@ -143,9 +142,9 @@ def GetTextPrefixPostfixCode(imgWidth, maxPixs=750, scale=0.8, widget=True):
     # fontWidthPixs = int(fontWidthPixs)
     PrefixCode = PrefixCode.format(fontWidthPixs=fontWidthPixs)
 
-    # print(fontWidthPixs, imgWidth)
+    text = PrefixCode + text.replace(" ", "&nbsp;").replace("\n", "<br>") + PostfixCode
 
-    return PrefixCode, PostfixCode
+    return text
 
 # UI Functions
 def UI_RegisterDisplayASCIIAnimation(frames, col=st, loopCount=-1):
@@ -215,8 +214,8 @@ def UI_ChooseStyle():
     IndicatorStyle = functools.partial(IMAGE_PROCESS_STYLES["Fill-Based"], IMAGE_FILL_ASCII=USERINPUT_ImageASCIIMap)
     INDICATOR_IMAGEASCII_ASCII, finalImg = AnimASCII.Convert_Image2ASCIIArt(IndicatorImageResized, IndicatorStyle)
     INDICATOR_IMAGEASCII_ASCII = AddInbetweenSpace(INDICATOR_IMAGEASCII_ASCII, spaces=2)
-    PrefixCode, PostfixCode = GetTextPrefixPostfixCode(GetASCIIWidth(INDICATOR_IMAGEASCII_ASCII), scale=0.25, widget=False)
-    col2.markdown(PrefixCode + INDICATOR_IMAGEASCII_ASCII + PostfixCode, unsafe_allow_html=True)
+    INDICATOR_IMAGEASCII_ASCII = GetTextDisplayCode(INDICATOR_IMAGEASCII_ASCII, GetASCIIWidth(INDICATOR_IMAGEASCII_ASCII), scale=0.25, compact=False)
+    col2.markdown(INDICATOR_IMAGEASCII_ASCII, unsafe_allow_html=True)
 
     USERINPUT_ProcessStyle = functools.partial(USERINPUT_ProcessStyle, IMAGE_FILL_ASCII=USERINPUT_ImageASCIIMap)
 
@@ -254,16 +253,17 @@ def text_to_ascii():
     USERINPUT_Text = st.text_area("Enter Text", "")
     USERINPUT_FontChoice = st.selectbox("Select Font", ["Select Font", "Random"] + Fonts.FONT_NAMES)
     if USERINPUT_FontChoice == "Select Font": return
+    USERINPUT_CompactDisplay = st.sidebar.checkbox("Compact Display", True)
 
     # Process Inputs
     GenASCIIArt = AnimASCII.Convert_Text2ASCIIArt(USERINPUT_Text, USERINPUT_FontChoice)
 
     # Display Output
     asciiWidth = GetASCIIWidth(GenASCIIArt)
-    PrefixCode, PostfixCode = GetTextPrefixPostfixCode(asciiWidth)
+    GenASCIIArt = GetTextDisplayCode(GenASCIIArt, asciiWidth, compact=USERINPUT_CompactDisplay)
 
     st.markdown("## Display ASCII Art")
-    st.markdown(PrefixCode + GenASCIIArt + PostfixCode, unsafe_allow_html=True)
+    st.markdown(GenASCIIArt, unsafe_allow_html=True)
 
 def image_to_ascii():
     # Title
@@ -281,6 +281,7 @@ def image_to_ascii():
     GenASCIIArt, I_final = AnimASCII.Convert_Image2ASCIIArt(USERINPUT_Image, USERINPUT_ProcessStyle)
     GenASCIIArt_Padded = PaddingLibrary.Padding_FramePad([GenASCIIArt])[0]
     GenASCIIArt_Padded = AddInbetweenSpace(GenASCIIArt_Padded, spaces=2)
+    USERINPUT_CompactDisplay = st.sidebar.checkbox("Compact Display", True)
 
     # Display Output
     st.markdown("## Display ASCII Art")
@@ -290,8 +291,8 @@ def image_to_ascii():
     col2.image(I_final, caption="Final Image", use_column_width=True)
 
     asciiWidth = GetASCIIWidth(GenASCIIArt_Padded)
-    PrefixCode, PostfixCode = GetTextPrefixPostfixCode(asciiWidth)
-    st.markdown(PrefixCode + GenASCIIArt_Padded + PostfixCode, unsafe_allow_html=True)
+    GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
+    st.markdown(GenASCIIArt_Padded, unsafe_allow_html=True)
 
 def video_to_ascii_animation():
     # Title
@@ -307,6 +308,7 @@ def video_to_ascii_animation():
 
     USERINPUT_Invert = st.checkbox("Invert Video Frames?")
     USERINPUT_ResizeRatio = st.slider("Resize Ratio", 0.0, 1.0, 0.01, 0.01)
+    USERINPUT_CompactDisplay = st.sidebar.checkbox("Compact Display", True)
 
     st.markdown("## Display ASCII Animation")
     LoaderWidget = st.empty()
@@ -338,7 +340,6 @@ def video_to_ascii_animation():
         LoaderWidget.markdown("All Frames Processed :smiley:!")
 
         asciiWidth = GetASCIIWidth(GenASCIIAnim[0])
-        PrefixCode, PostfixCode = GetTextPrefixPostfixCode(asciiWidth)
 
         frameMaxCount = len(USERINPUT_Frames)
         frameIndex = 0
@@ -346,12 +347,11 @@ def video_to_ascii_animation():
             frame = cv2.cvtColor(USERINPUT_Frames[frameIndex], cv2.COLOR_BGR2RGB)
             frame_processed = Frames_Processed[frameIndex]
             GenASCIIArt_Padded = GenASCIIAnim[frameIndex]
+            GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
             AnimWidget_Frame.image(frame, caption="Original", use_column_width=True)
             AnimWidget_FinalImage.image(frame_processed, caption="Final", use_column_width=True)
             AnimWidget_ASCII.markdown("\n"
-             + PrefixCode
              + GenASCIIArt_Padded
-             + PostfixCode
             , unsafe_allow_html=True)
             frameIndex = (frameIndex + 1) % frameMaxCount
             time.sleep(VIDEO_DISPLAYDELAY)
@@ -378,15 +378,13 @@ def video_to_ascii_animation():
 
                 if not sizeFixed:
                     asciiWidth = GetASCIIWidth(GenASCIIArt_Padded)
-                    PrefixCode, PostfixCode = GetTextPrefixPostfixCode(asciiWidth)
+                    GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
                     sizeFixed = True
 
                 AnimWidget_Frame.image(frame, caption="Original", use_column_width=True)
                 AnimWidget_FinalImage.image(frame_processed, caption="Final", use_column_width=True)
                 AnimWidget_ASCII.markdown("\n"
-                + PrefixCode
                 + GenASCIIArt_Padded
-                + PostfixCode
                 , unsafe_allow_html=True)
 
 #############################################################################################################################
