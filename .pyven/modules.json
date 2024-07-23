@@ -81,6 +81,14 @@
             "sub_dir": "",
             "dependencies": []
         },
+        "ImageClip.py": {
+            "name": "ImageClip",
+            "type": "missing",
+            "link": "",
+            "parent_dir": "",
+            "sub_dir": "",
+            "dependencies": []
+        },
         "PaddingLibrary.py": {
             "name": "PaddingLibrary",
             "type": "local",
@@ -97,6 +105,8 @@
             "sub_dir": "Utils",
             "dependencies": [
                 "Image.py",
+                "ImageClip.py",
+                "concatenate_videoclips.py",
                 "cv2.py",
                 "matplotlib/pyplot.py",
                 "numpy.py",
@@ -135,9 +145,17 @@
         },
         "art.py": {
             "name": "art",
-            "type": "inbuilt",
+            "type": "missing",
             "link": "",
-            "parent_dir": "E:/Github Codes and Projects/Projects/AnimASCII",
+            "parent_dir": "",
+            "sub_dir": "",
+            "dependencies": []
+        },
+        "concatenate_videoclips.py": {
+            "name": "concatenate_videoclips",
+            "type": "missing",
+            "link": "",
+            "parent_dir": "",
             "sub_dir": "",
             "dependencies": []
         },

@@ -9,5 +9,8 @@
         "Utils/",
         "Data/FontsData/",
         "Data/Examples/"
-    ]
+    ],
+    "streamlit": {
+        "link": "https://kausikn-animascii.streamlit.app/"
+    }
 }

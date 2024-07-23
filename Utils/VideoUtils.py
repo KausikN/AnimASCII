@@ -9,6 +9,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from moviepy.editor import ImageClip, concatenate_videoclips
 
 # Main Functions
 def ReadImage(imgPath, imgSize=None, keepAspectRatio=False):
@@ -107,7 +108,7 @@ def DisplayVideo(vid=None, path=None, max_frames=-1, EffectFunc=None):
 
     cv2.destroyAllWindows()
 
-def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0, size=None):
+def VideoEffect_FFMPEG(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0, size=None):
     frames = GetFramesFromVideo(path=pathIn, max_frames=max_frames)
     frames = frames[::int(speedUp)]
 
@@ -130,6 +131,27 @@ def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0,
         for frame in frames_effect:
             out.write(frame)
         out.release()
+
+def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=24.0, size=None):
+    frames = GetFramesFromVideo(path=pathIn, max_frames=max_frames)
+    frames = frames[::int(speedUp)]
+    frame_duration = 1.0 / fps
+
+    frames_effect = []
+    for frame in tqdm(frames):
+        frame = cv2.cvtColor(EffectFunc(frame), cv2.COLOR_BGR2RGB)
+        frames_effect.append(Image.fromarray(frame))
+
+    FRAMES = []
+    # Create Image Clips
+    for i in range(len(frames_effect)):
+        frame_clip = ImageClip(frames_effect[i]).set_duration(frame_duration)
+        FRAMES.append(frame_clip)
+    # Concatenate
+    VIDEO = concatenate_videoclips(FRAMES, method="chain")
+    # Write Video
+    os.makedirs(os.path.dirname(pathOut), exist_ok=True)
+    VIDEO.write_videofile(pathOut, fps=fps)
 
 # Frame Functions
 def GetFillBoxFromFrameName(framePath):
