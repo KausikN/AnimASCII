@@ -195,7 +195,7 @@ def GetFillBoxFromFrameName(framePath):
     FillBox = [[int(frameData[0])/int(frameData[2]), int(frameData[1])/int(frameData[2])], [int(frameData[3])/int(frameData[5]), int(frameData[4])/int(frameData[5])]]
     return FillBox
 
-# Driver Code
+# Run Code
 # Params
 # path = "TestVids/test.mp4"
 # # Params

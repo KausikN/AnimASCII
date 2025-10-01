@@ -51,7 +51,7 @@ def GenerateASCII_ImageBased_Border(I, IMAGE_FILL_ASCII, thresholds=[30, 200]):
     asciiData = "\n".join(["".join(list(row)) for row in asciiArray])
     return asciiData, I_edge
 
-# Driver Code
+# Run Code
 # # Params
 # imgPath = "Data/TestImgs/Test.jpg"
 # # Params

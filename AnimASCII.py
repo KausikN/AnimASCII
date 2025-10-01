@@ -64,7 +64,7 @@ def Animation_Generate_Basic(data, savePath, GenertorFunc=GeneratorLibrary.Gener
 
     return jsonData
 
-# # Driver Code
+# # Run Code
 # # Params
 # animName = "Loading_3"
 # savePath = "Data/Examples/" + animName + ".json"

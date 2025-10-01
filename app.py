@@ -430,6 +430,6 @@ def video_to_ascii_animation():
                 , unsafe_allow_html=True)
 
 #############################################################################################################################
-# Driver Code
+# Run Code
 if __name__ == "__main__":
     main()
