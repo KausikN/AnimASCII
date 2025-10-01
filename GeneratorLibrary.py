@@ -8,6 +8,9 @@ import numpy as np
 
 # Main Functions
 def GenerateAnimation_TextBased_BuildUpText(data):
+    '''
+    Generate Animation - Text Based - Build Up Text
+    '''
     # Build up the given text letter by letter as animation - left to right - multi lines supported
     text = data["text"]
     textLines = text.split("\n")
@@ -24,6 +27,9 @@ def GenerateAnimation_TextBased_BuildUpText(data):
     return animList
 
 def GenerateASCII_ImageBased_Fill(I, IMAGE_FILL_ASCII):
+    '''
+    Generate ASCII - Image Based - Fill
+    '''
     I_g = cv2.cvtColor(I, cv2.COLOR_RGB2GRAY) if I.ndim == 3 else I
     asciiArray = np.array([[IMAGE_FILL_ASCII["default"]["fillStr"]]*I_g.shape[1]]*I_g.shape[0])
     for fillVals in IMAGE_FILL_ASCII["map"]:
@@ -33,6 +39,9 @@ def GenerateASCII_ImageBased_Fill(I, IMAGE_FILL_ASCII):
     return asciiData, I_g
 
 def GenerateASCII_ImageBased_Border(I, IMAGE_FILL_ASCII, thresholds=[30, 200]):
+    '''
+    Generate ASCII - Image Based - Border
+    '''
     I_g = cv2.cvtColor(I, cv2.COLOR_RGB2GRAY) if I.ndim == 3 else I
     I_edge = cv2.Canny(I_g , thresholds[0], thresholds[1])
     asciiArray = np.array([[IMAGE_FILL_ASCII["default"]["fillStr"]]*I_g.shape[1]]*I_g.shape[0])

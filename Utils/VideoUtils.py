@@ -9,10 +9,14 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from moviepy.editor import ImageClip, concatenate_videoclips
+from stqdm import stqdm
+from moviepy import ImageClip, concatenate_videoclips
 
 # Main Functions
 def ReadImage(imgPath, imgSize=None, keepAspectRatio=False):
+    '''
+    Read Image
+    '''
     I = cv2.imread(imgPath)
     if not imgSize == None:
         size_original = [I.shape[0], I.shape[1]]
@@ -33,22 +37,37 @@ def ReadImage(imgPath, imgSize=None, keepAspectRatio=False):
     return I
 
 def DisplayImage(I, title=""):
+    '''
+    Display Image
+    '''
     I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)
     plt.imshow(I, "gray")
     plt.title(title)
     plt.show()
 
 def SaveImage(I, path):
+    '''
+    Save Image
+    '''
     cv2.imwrite(path, I)
 
 def ReadVideo(path):
+    '''
+    Read Video
+    '''
     cap = cv2.VideoCapture(path)
     return cap
 
 def WebcamVideo():
+    '''
+    Webcam Video
+    '''
     return cv2.VideoCapture(0)
 
 def GetFramesFromVideo(vid=None, path=None, max_frames=-1):
+    '''
+    Get Frames from Video
+    '''
     if vid is None:
         vid = ReadVideo(path)
     
@@ -76,6 +95,9 @@ def GetFramesFromVideo(vid=None, path=None, max_frames=-1):
     return frames
 
 def DisplayVideo(vid=None, path=None, max_frames=-1, EffectFunc=None):
+    '''
+    Display Video
+    '''
     if vid is None:
         vid = ReadVideo(path)
     
@@ -108,12 +130,17 @@ def DisplayVideo(vid=None, path=None, max_frames=-1, EffectFunc=None):
 
     cv2.destroyAllWindows()
 
-def VideoEffect_FFMPEG(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0, size=None):
+def VideoEffect_FFMPEG(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=20.0, size=None, use_stqdm=False):
+    '''
+    Video Effect - FFMPEG
+    '''
+    TQDM = stqdm if use_stqdm else tqdm
+
     frames = GetFramesFromVideo(path=pathIn, max_frames=max_frames)
     frames = frames[::int(speedUp)]
 
     frames_effect = []
-    for frame in tqdm(frames):
+    for frame in TQDM(frames):
         frame = cv2.cvtColor(EffectFunc(frame), cv2.COLOR_BGR2RGB)
         frames_effect.append(Image.fromarray(frame))
 
@@ -132,20 +159,25 @@ def VideoEffect_FFMPEG(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fp
             out.write(frame)
         out.release()
 
-def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=24.0, size=None):
+def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=24.0, size=None, use_stqdm=False):
+    '''
+    Video Effect
+    '''
+    TQDM = stqdm if use_stqdm else tqdm
+
     frames = GetFramesFromVideo(path=pathIn, max_frames=max_frames)
     frames = frames[::int(speedUp)]
     frame_duration = 1.0 / fps
 
     frames_effect = []
-    for frame in tqdm(frames):
+    for frame in TQDM(frames):
         frame = cv2.cvtColor(EffectFunc(frame), cv2.COLOR_BGR2RGB)
         frames_effect.append(Image.fromarray(frame))
 
     FRAMES = []
     # Create Image Clips
     for i in range(len(frames_effect)):
-        frame_clip = ImageClip(frames_effect[i]).set_duration(frame_duration)
+        frame_clip = ImageClip(frames_effect[i]).with_duration(frame_duration)
         FRAMES.append(frame_clip)
     # Concatenate
     VIDEO = concatenate_videoclips(FRAMES, method="chain")
@@ -155,6 +187,9 @@ def VideoEffect(pathIn, pathOut, EffectFunc, max_frames=-1, speedUp=1, fps=24.0,
 
 # Frame Functions
 def GetFillBoxFromFrameName(framePath):
+    '''
+    Get Fill Box from Frame Name
+    '''
     frameName = os.path.splitext(os.path.basename(framePath))[0]
     frameData = frameName.split("_")[2:]
     FillBox = [[int(frameData[0])/int(frameData[2]), int(frameData[1])/int(frameData[2])], [int(frameData[3])/int(frameData[5]), int(frameData[4])/int(frameData[5])]]

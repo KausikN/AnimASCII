@@ -1,4 +1,0 @@
-Image (Greyscale, Color) to ASCII
-Video to ASCII Sequence / Animation
-
-Streamlit display for ASCII Sequence / Animations

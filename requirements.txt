@@ -1,5 +1,6 @@
 streamlit
 tqdm
+stqdm
 numpy
 matplotlib
 opencv-python-headless

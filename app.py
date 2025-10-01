@@ -48,10 +48,16 @@ def HomePage():
 
 #############################################################################################################################
 # Repo Based Vars
-ANIMATION_EXAMPLES_PATH = "Data/Examples/"
-DEFAULT_PATH_EXAMPLEIMAGE = "StreamLitGUI/DefaultData/ExampleImage.png"
-DEFAULT_PATH_EXAMPLEVIDEO = "StreamLitGUI/DefaultData/ExampleVideo.mp4"
-IMAGE_ASCII_MAP_DIR = "Data/ImageASCIIData/"
+PATHS = {
+    "animations": {
+        "examples": "Data/Examples/"
+    },
+    "defaults": {
+        "image": "StreamLitGUI/DefaultData/ExampleImage.png",
+        "video": "StreamLitGUI/DefaultData/ExampleVideo.mp4"
+    },
+    "image_ascii_maps": "Data/ImageASCIIData/"
+}
 
 IMAGE_PROCESS_STYLES = {
     "Fill-Based": GeneratorLibrary.GenerateASCII_ImageBased_Fill,
@@ -78,21 +84,33 @@ INDICATOR_IMAGEASCII_ASCII = None
 
 # Util Functions
 def AddInbetweenSpace(text, spaces=1):
+    '''
+    Adds spaces inbetween characters of text
+    '''
     textLines = text.split("\n")
     textSpacedLines = [(" "*spaces).join(list(l)) for l in textLines]
     textSpaced = "\n".join(textSpacedLines)
     return textSpaced
 
 def GetNames(data):
+    '''
+    Gets names from list of dicts with "name" key
+    '''
     data_names = []
     for d in data:
         data_names.append(d["name"])
     return data_names
 
 def GetASCIIWidth(asciiData):
+    '''
+    Gets width of ASCII data
+    '''
     return max(list(map(len, asciiData.split("\n"))))
 
 def GenerateIndicatorImage_ImageASCII():
+    '''
+    Generate Indicator Image - Default gradient image
+    '''
     global INDICATOR_IMAGEASCII_IMAGE
     if INDICATOR_IMAGEASCII_IMAGE is None:
         INDICATOR_IMAGEASCII_IMAGE = [list(range(i, i+128)) for i in range(0, 128)]
@@ -102,6 +120,9 @@ def GenerateIndicatorImage_ImageASCII():
 
 # Main Functions
 def DisplayASCIIAnimationsCombined():
+    '''
+    Displays all registered ASCII animations in combined manner
+    '''
     i = 0
     allDone = False
     while not allDone:
@@ -119,19 +140,28 @@ def DisplayASCIIAnimationsCombined():
         time.sleep(ANIMATION_DISPLAYDELAY)
 
 def LoadExampleAnimations():
+    '''
+    Load example animations
+    '''
     global ANIMATION_EXAMPLES
-    for p in os.listdir(ANIMATION_EXAMPLES_PATH):
-        anim = json.load(open(os.path.join(ANIMATION_EXAMPLES_PATH, p), "r"))
+    for p in os.listdir(PATHS["animations"]["examples"]):
+        anim = json.load(open(os.path.join(PATHS["animations"]["examples"], p), "r"))
         ANIMATION_EXAMPLES.append(anim)
 
 def LoadImageASCIIMaps():
+    '''
+    Load Image ASCII Maps
+    '''
     global IMAGE_ASCII_MAPS
-    for f in os.listdir(IMAGE_ASCII_MAP_DIR):
+    for f in os.listdir(PATHS["image_ascii_maps"]):
         if f.endswith(".json"):
-            image_ascii_map = json.load(open(os.path.join(IMAGE_ASCII_MAP_DIR, f), "r"))
+            image_ascii_map = json.load(open(os.path.join(PATHS["image_ascii_maps"], f), "r"))
             IMAGE_ASCII_MAPS[image_ascii_map["name"]] = image_ascii_map
 
 def GetTextDisplayCode(text, imgWidth, maxPixs=750, scale=0.8, compact=True):
+    '''
+    Get text display code for streamlit
+    '''
     if compact: return "```\n" + text + "\n```"
 
     fontPixRange = [0.01, 35.0]
@@ -148,16 +178,22 @@ def GetTextDisplayCode(text, imgWidth, maxPixs=750, scale=0.8, compact=True):
 
 # UI Functions
 def UI_RegisterDisplayASCIIAnimation(frames, col=st, loopCount=-1):
+    '''
+    UI - Register Display ASCII Animation
+    '''
     AnimDisplay = col.empty()
     ANIMATION_PLAYLIST.append([AnimDisplay, frames, loopCount, False])
 
 def UI_LoadImage():
+    '''
+    UI - Load Image
+    '''
     USERINPUT_ImageData = st.file_uploader("Upload Start Image", ["png", "jpg", "jpeg", "bmp"])
 
     if USERINPUT_ImageData is not None:
         USERINPUT_ImageData = USERINPUT_ImageData.read()
     if USERINPUT_ImageData is None:
-        USERINPUT_ImageData = open(DEFAULT_PATH_EXAMPLEIMAGE, "rb").read()
+        USERINPUT_ImageData = open(PATHS["defaults"]["image"], "rb").read()
 
     USERINPUT_Image = cv2.imdecode(np.frombuffer(USERINPUT_ImageData, np.uint8), cv2.IMREAD_COLOR)
     USERINPUT_Image = cv2.cvtColor(USERINPUT_Image, cv2.COLOR_BGR2RGB)
@@ -174,6 +210,9 @@ def UI_LoadImage():
     return USERINPUT_Image
 
 def UI_LoadVideo():
+    '''
+    UI - Load Video
+    '''
     USERINPUT_VideoInputChoice = st.selectbox("Select Video Input Source", list(INPUTREADERS_VIDEO.keys()))
 
     USERINPUT_VideoReader = None
@@ -183,7 +222,7 @@ def UI_LoadVideo():
         USERINPUT_VideoReader = INPUTREADERS_VIDEO[USERINPUT_VideoInputChoice]
         USERINPUT_VideoPath = st.file_uploader("Upload Video", ["avi", "mp4", "wmv"])
         if USERINPUT_VideoPath is None:
-            USERINPUT_VideoPath = DEFAULT_PATH_EXAMPLEVIDEO
+            USERINPUT_VideoPath = PATHS["defaults"]["video"]
         USERINPUT_VideoReader = functools.partial(USERINPUT_VideoReader, USERINPUT_VideoPath)
         FiniteFrames = True
     # Webcam
@@ -195,6 +234,9 @@ def UI_LoadVideo():
     return USERINPUT_Video, not FiniteFrames
 
 def UI_ChooseStyle():
+    '''
+    UI - Choose Style
+    '''
     global INDICATOR_IMAGEASCII_IMAGE
 
     USERINPUT_StyleChoice = st.selectbox("Select Style", ["Select Style"] + list(IMAGE_PROCESS_STYLES.keys()))
@@ -209,7 +251,7 @@ def UI_ChooseStyle():
 
     col1, col2 = st.sidebar.columns(2)
     GenerateIndicatorImage_ImageASCII()
-    col1.image(INDICATOR_IMAGEASCII_IMAGE, caption="Indicator Image", use_column_width=True)
+    col1.image(INDICATOR_IMAGEASCII_IMAGE, caption="Indicator Image", use_container_width=True)
     IndicatorImageResized = cv2.resize(INDICATOR_IMAGEASCII_IMAGE, tuple(INDICATOR_IMAGEASCII_ASCII_SIZE))
     IndicatorStyle = functools.partial(IMAGE_PROCESS_STYLES["Fill-Based"], IMAGE_FILL_ASCII=USERINPUT_ImageASCIIMap)
     INDICATOR_IMAGEASCII_ASCII, finalImg = AnimASCII.Convert_Image2ASCIIArt(IndicatorImageResized, IndicatorStyle)
@@ -287,8 +329,8 @@ def image_to_ascii():
     st.markdown("## Display ASCII Art")
 
     col1, col2 = st.columns(2)
-    col1.image(USERINPUT_Image, caption="Original Image", use_column_width=True)
-    col2.image(I_final, caption="Final Image", use_column_width=True)
+    col1.image(USERINPUT_Image, caption="Original Image", use_container_width=True)
+    col2.image(I_final, caption="Final Image", use_container_width=True)
 
     asciiWidth = GetASCIIWidth(GenASCIIArt_Padded)
     GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
@@ -348,8 +390,8 @@ def video_to_ascii_animation():
             frame_processed = Frames_Processed[frameIndex]
             GenASCIIArt_Padded = GenASCIIAnim[frameIndex]
             GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
-            AnimWidget_Frame.image(frame, caption="Original", use_column_width=True)
-            AnimWidget_FinalImage.image(frame_processed, caption="Final", use_column_width=True)
+            AnimWidget_Frame.image(frame, caption="Original", use_container_width=True)
+            AnimWidget_FinalImage.image(frame_processed, caption="Final", use_container_width=True)
             AnimWidget_ASCII.markdown("\n"
              + GenASCIIArt_Padded
             , unsafe_allow_html=True)
@@ -381,8 +423,8 @@ def video_to_ascii_animation():
                     GenASCIIArt_Padded = GetTextDisplayCode(GenASCIIArt_Padded, asciiWidth, compact=USERINPUT_CompactDisplay)
                     sizeFixed = True
 
-                AnimWidget_Frame.image(frame, caption="Original", use_column_width=True)
-                AnimWidget_FinalImage.image(frame_processed, caption="Final", use_column_width=True)
+                AnimWidget_Frame.image(frame, caption="Original", use_container_width=True)
+                AnimWidget_FinalImage.image(frame_processed, caption="Final", use_container_width=True)
                 AnimWidget_ASCII.markdown("\n"
                 + GenASCIIArt_Padded
                 , unsafe_allow_html=True)

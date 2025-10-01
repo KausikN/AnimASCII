@@ -14,8 +14,8 @@
                     "Cached": 1
                 },
                 "check_based": {
-                    "StartUICheck": true,
-                    "GenReqCheck": false
+                    "RunExecutable": true,
+                    "GenReqExecutable": false
                 }
             }
         }

@@ -7,6 +7,9 @@ Padding Library for ascii animation padding functions
 
 # Main Functions
 def Padding_SimpleStrRepeat(textList, padStr="o", X_count=1, Y_count=1):
+    '''
+    Padding - Simple String Repeat
+    '''
     # Pad the data in X and Y as specified with mentioned string for mentioned times
     # ---
     # -0-       =>  Padding 1, 1
@@ -37,6 +40,9 @@ def Padding_SimpleStrRepeat(textList, padStr="o", X_count=1, Y_count=1):
     return processedList
 
 def Padding_FramePad(textList):
+    '''
+    Padding - Frame Pad
+    '''
     # Pad the data in X and Y as specified with mentioned string for mentioned times
     # .---.
     # |000|       =>  Padding 1, 1

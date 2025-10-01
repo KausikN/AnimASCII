@@ -3,7 +3,6 @@ A tool for generating and viewing ASCII animations (from images, text, sound and
 """
 
 # Imports
-import cv2
 import functools
 import json
 import art
@@ -13,6 +12,9 @@ import PaddingLibrary
 
 # Utils Functions
 def Convert_ASCIIAnimList2JSONData(animList, name="Animation"):
+    '''
+    Convert - ASCII Animation List to JSON Data
+    '''
     jsonData = {
         "name": name,
         "data": animList
@@ -21,15 +23,24 @@ def Convert_ASCIIAnimList2JSONData(animList, name="Animation"):
 
 # Conversion Functions
 def Convert_Text2ASCIIArt(text, font="random"):
+    '''
+    Convert - Text to ASCII Art
+    '''
     asciiArt = art.text2art(text, font=font, chr_ignore=True)
     return asciiArt
 
 def Convert_Image2ASCIIArt(I, processFunc=None):
+    '''
+    Convert - Image to ASCII Art
+    '''
     asciiArt, finalImg = processFunc(I)
     return asciiArt, finalImg
 
 # Main Functions
 def Animation_Generate_Basic(data, savePath, GenertorFunc=GeneratorLibrary.GenerateAnimation_TextBased_BuildUpText):
+    '''
+    Animation - Generate - Basic
+    '''
     # Preprocess Data
     if "preProcessFuncs" in data.keys():
         text = data["text"]
